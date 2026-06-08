@@ -1,0 +1,434 @@
+/* ── CSS Variables (macOS-inspired palette) ──────────────────────── */
+:root {
+  --bg-primary: rgba(30, 30, 30, 0.82);
+  --bg-secondary: rgba(255, 255, 255, 0.06);
+  --bg-hover: rgba(255, 255, 255, 0.12);
+  --bg-selected: rgba(0, 122, 255, 0.55);
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.5);
+  --text-tertiary: rgba(255, 255, 255, 0.35);
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: rgb(0, 122, 255);
+  --danger: rgba(255, 69, 58, 0.8);
+  --pin: rgb(255, 214, 10);
+  --radius: 8px;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", sans-serif;
+  --drag-bg: rgba(0, 122, 255, 0.12);
+  --drag-border: rgba(0, 122, 255, 0.5);
+}
+
+/* ── Light Theme ──────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg-primary: rgba(255, 255, 255, 0.88);
+  --bg-secondary: rgba(0, 0, 0, 0.04);
+  --bg-hover: rgba(0, 0, 0, 0.08);
+  --bg-selected: rgba(0, 122, 255, 0.28);
+  --text-primary: rgba(0, 0, 0, 0.88);
+  --text-secondary: rgba(0, 0, 0, 0.5);
+  --text-tertiary: rgba(0, 0, 0, 0.35);
+  --border: rgba(0, 0, 0, 0.1);
+  --accent: rgb(0, 122, 255);
+  --danger: rgba(255, 69, 58, 0.75);
+  --pin: rgb(204, 153, 0);
+  --drag-bg: rgba(0, 122, 255, 0.08);
+  --drag-border: rgba(0, 122, 255, 0.45);
+}
+
+/* ── Global Reset ─────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text-primary);
+  background: transparent; /* vibrancy handles the blur */
+}
+
+/* ── App Shell ────────────────────────────────────────────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  outline: none;
+}
+
+/* ── Header ───────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  -webkit-app-region: drag; /* drag window by header */
+  border-bottom: 1px solid var(--border);
+}
+
+.search-input {
+  flex: 1;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--text-primary);
+  font-family: var(--font);
+  outline: none;
+  -webkit-app-region: no-drag;
+  transition: border-color 0.15s ease;
+}
+
+.search-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+}
+
+.clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 5px;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  transition: all 0.12s ease;
+  flex-shrink: 0;
+}
+
+.clear-btn:hover {
+  background: var(--bg-hover);
+  color: var(--danger);
+}
+
+/* ── List ─────────────────────────────────────────────────────────── */
+.list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 0;
+}
+
+.list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* ── Empty State ──────────────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+  padding: 20px;
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+/* ── Clipboard Item ───────────────────────────────────────────────── */
+.clipboard-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  margin: 0 6px 2px;
+  border-radius: 7px;
+  cursor: default;
+  transition: background 0.1s ease;
+  min-height: 44px;
+}
+
+.clipboard-item:hover {
+  background: var(--bg-hover);
+}
+
+.clipboard-item.selected {
+  background: var(--bg-selected);
+}
+
+.clipboard-item.pinned {
+  border: 1px solid rgba(255, 214, 10, 0.18);
+}
+
+/* ── Item Icon ────────────────────────────────────────────────────── */
+.item-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background: var(--bg-secondary);
+  overflow: hidden;
+  color: var(--text-secondary);
+}
+
+.thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.type-icon {
+  color: var(--text-secondary);
+}
+
+/* ── Item Body ────────────────────────────────────────────────────── */
+.item-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item-preview {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 10.5px;
+  color: var(--text-tertiary);
+}
+
+.item-type {
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+}
+
+/* ── Item Actions ─────────────────────────────────────────────────── */
+.item-actions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.clipboard-item:hover .item-actions {
+  opacity: 1;
+}
+
+.action-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.action-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.pin-btn.active {
+  color: var(--pin);
+}
+
+.del-btn:hover {
+  color: var(--danger);
+  background: rgba(255, 69, 58, 0.15);
+}
+
+/* ── Footer ───────────────────────────────────────────────────────── */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 12px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--text-tertiary);
+  -webkit-app-region: drag;
+}
+
+.footer-hint {
+  color: var(--text-tertiary);
+  opacity: 0.6;
+}
+
+/* ── Footer Settings Buttons ───────────────────────────────────────── */
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  -webkit-app-region: no-drag;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-app-region: no-drag;
+}
+
+.settings-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  transition: all 0.12s ease;
+  -webkit-app-region: no-drag;
+}
+
+.settings-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.settings-btn.active {
+  color: var(--accent);
+}
+
+.footer-span {
+  -webkit-app-region: no-drag;
+}
+
+/* ── Drag Overlay ──────────────────────────────────────────────────── */
+.drag-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  background: var(--drag-bg);
+  border: 3px dashed var(--drag-border);
+  border-radius: 12px;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.app.drag-over .drag-overlay {
+  display: flex;
+}
+
+.drag-overlay span {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--bg-primary);
+  padding: 12px 24px;
+  border-radius: 10px;
+}
+
+/* ── File Size Formatting ──────────────────────────────────────────── */
+.file-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 10.5px;
+  color: var(--text-tertiary);
+}
+
+.file-type {
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+}
+
+/* ── Settings Dropdown ─────────────────────────────────────────────── */
+.settings-dropdown {
+  position: absolute;
+  bottom: 100%;
+  right: 4px;
+  margin-bottom: 4px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  z-index: 200;
+  min-width: 100px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.settings-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 5px 12px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-family: var(--font);
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.settings-dropdown button:hover {
+  background: var(--bg-hover);
+}
+
+.settings-dropdown button.selected {
+  color: var(--accent);
+  font-weight: 500;
+}

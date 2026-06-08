@@ -1,19 +1,69 @@
-# Clippy-Mac-
- 极简，实用。一个专注核心体验的 macOS 剪贴板管理器。 / A minimalist and practical clipboard manager for macOS.
-## ✨ 核心特性 (Features)
+# Clippy — macOS Clipboard Manager
 
-*   **极简设计：** 干净、现代的用户界面，完美融入 macOS 视觉风格。
-*   **即用即走：** 全局快捷键一键唤醒，选中即粘贴，绝不打扰当前工作流。
-*   **安全本地化：** 所有剪贴板历史记录均保存在本地，无需联网，保护你的隐私。
-*   **轻量高效：** 占用极低的系统资源，后台静默运行。
+一个轻量、无感、美观的 macOS 剪贴板管理器。
 
-## 🛠 技术栈 (Tech Stack)
+## 功能
 
-本项目采用现代前端技术栈构建：
+- 🔍 **实时剪贴板监控** — 自动记录文本、HTML、图片
+- 📌 **固定常用项** — 重要内容不会被自动清理
+- 🔎 **即时搜索** — 快速找到历史记录
+- ⌨️ **键盘导航** — ↑↓ 选择 · ↵ 复制 · Esc 关闭
+- 🌐 **多语言** — 简体中文 / English，自动跟随系统
+- 🌓 **黑白主题** — 自动跟随系统 / 手动切换
+- 📎 **文件拖拽** — 拖入文件即可保存到剪贴板历史
+- 🖥️ **菜单栏图标** — 常驻菜单栏，Cmd+Shift+V 呼出
 
-*   **框架:** [Electron](https://www.electronjs.org/) (跨平台桌面应用引擎)
-*   **前端:** [React](https://reactjs.org/) (构建用户界面的 JavaScript 库)
-*   **构建工具:** [Electron-builder](https://www.electron.build/) (打包与分发)
+## 技术栈
 
-   📄 开源协议 (License)
-本项目基于 MIT License 开源。
+- Electron 29 + React 18
+- Webpack 5 + Babel
+- CSS Variables (macOS 原生风格)
+
+## 快速开始
+
+```bash
+# 安装依赖
+npm install
+
+# 开发运行
+npm start
+
+# 打包 DMG
+npm run dist
+```
+
+## 项目结构
+
+```
+├── main.js              # Electron 主进程
+├── preload.js           # 预加载脚本 (contextBridge)
+├── webpack.config.js    # Webpack 配置
+├── src/
+│   ├── index.html       # HTML 模板
+│   ├── index.jsx        # React 入口 + 设置初始化
+│   ├── App.jsx          # 主界面组件
+│   ├── App.css          # 样式 (dark + light)
+│   ├── useTheme.js      # 主题 hook
+│   ├── i18n/            # 国际化
+│   │   ├── index.js     # I18nProvider
+│   │   ├── en.js        # English
+│   │   └── zh-CN.js     # 简体中文
+│   └── components/
+│       └── ClipboardItem.jsx  # 剪贴板项组件
+└── assets/
+    ├── icon.png         # 应用图标
+    └── icon.icns        # macOS 图标
+```
+
+## 快捷键
+
+| 快捷键 | 功能 |
+|--------|------|
+| Cmd+Shift+V | 显示/隐藏窗口 |
+| ↑↓ | 导航列表 |
+| ↵ | 复制选中项 |
+| Esc | 清除搜索 / 关闭 |
+
+## 许可
+
+MIT
